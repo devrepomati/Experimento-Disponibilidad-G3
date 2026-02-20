@@ -4,7 +4,7 @@
     "url": "/api/pay",
     "bodyPatterns": [
       {
-        "matchesJsonPath": "$[?(@.should_fail == true || @.should_fail == 'true')]"
+        "matchesJsonPath": "$[?(@.should_fail == true || @.should_fail == 'true' || @.should_fail == 'True')]"
       }
     ],
     "headers": {

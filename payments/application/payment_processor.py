@@ -23,19 +23,28 @@ def payment_processor(event, dlq_producer=None):
     }
 
     # Realizar POST
-    response = requests.post("http://wiremock:8080/api/pay", json=payload)
-    response_text = response.text
+    try:
+        response = requests.post("http://wiremock:8080/api/pay", json=payload)
+        response_text = response.text
 
-    # Determinar status según respuesta
-    if "ERROR" in response_text:
+        # Determinar status según respuesta
+        if "ERROR" in response_text:
+            status = "PAYMENT_IN_PROCESS"
+            # Enviar a DLQ solo si hay error y si se pasó el producer
+            if dlq_producer is not None:
+                dlq_producer.send_event(event)
+                payments_dlq_total.inc()
+        else:
+            status = "PAYED"
+            payments_processed_total.inc()
+    except requests.exceptions.RequestException as e:
+        # Error de conexión u otro error de requests: enviar a DLQ
         status = "PAYMENT_IN_PROCESS"
-        # Enviar a DLQ solo si hay error y si se pasó el producer
         if dlq_producer is not None:
             dlq_producer.send_event(event)
             payments_dlq_total.inc()
-    else:
-        status = "PAYED"
-        payments_processed_total.inc()
+        response_text = f"EXCEPTION: {e}"
+        response = None
 
     # Guardar en base de datos
     payment_data = {

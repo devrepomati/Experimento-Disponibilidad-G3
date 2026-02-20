@@ -2,6 +2,11 @@
   "request": {
     "method": "POST",
     "url": "/api/pay",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$[?(!(@.should_fail == true || @.should_fail == 'true' || @.should_fail == 'True'))]"
+      }
+    ],
     "headers": {
       "Content-Type": {
         "contains": "application/json"

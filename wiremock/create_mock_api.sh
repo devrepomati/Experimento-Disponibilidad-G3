@@ -14,7 +14,7 @@ cat > "$MAPPINGS_DIR/pay-mock-fail.json" <<'EOF'
     "url": "/api/pay",
     "bodyPatterns": [
       {
-        "matchesJsonPath": "$[?(@.should_fail == true || @.should_fail == 'true')]"
+        "matchesJsonPath": "$[?(@.should_fail == true || @.should_fail == 'true' || @.should_fail == 'True')]"
       }
     ],
     "headers": {
@@ -41,6 +41,11 @@ cat > "$MAPPINGS_DIR/pay-mock-success.json" <<'EOF'
   "request": {
     "method": "POST",
     "url": "/api/pay",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$[?(!(@.should_fail == true || @.should_fail == 'true' || @.should_fail == 'True'))]"
+      }
+    ],
     "headers": {
       "Content-Type": {
         "contains": "application/json"
