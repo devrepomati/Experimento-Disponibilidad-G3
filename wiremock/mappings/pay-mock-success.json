@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/pay",
+    "headers": {
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "status": "pay"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

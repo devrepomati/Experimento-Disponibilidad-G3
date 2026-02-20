@@ -23,7 +23,7 @@ def payment_processor(event, dlq_producer=None):
     }
 
     # Realizar POST
-    response = requests.post("https://pay-api-test.wiremockapi.cloud/pay", json=payload)
+    response = requests.post("http://wiremock:8080/api/pay", json=payload)
     response_text = response.text
 
     # Determinar status según respuesta

@@ -38,6 +38,7 @@ services:
       - travel-hub-net
     ports:
       - "8004:8004"
+      - "8005:8005"
     volumes:
       - ./payments/payments.db:/app/payments.db
 
@@ -156,6 +157,20 @@ services:
       - travel-hub-net
     depends_on:
       - prometheus
+
+  wiremock:
+    image: wiremock/wiremock:3.5.2
+    container_name: wiremock
+    ports:
+      - "8083:8080"
+    volumes:
+      - ./wiremock/mappings:/home/wiremock/mappings
+      - ./wiremock/__files:/home/wiremock/__files
+      - ./wiremock/create_mock_api.sh:/home/wiremock/create_mock_api.sh
+      - ./wiremock/entrypoint.sh:/home/wiremock/entrypoint.sh
+    entrypoint: ["/bin/bash", "/home/wiremock/entrypoint.sh"]
+    networks:
+      - travel-hub-net
 
 networks:
   travel-hub-net:

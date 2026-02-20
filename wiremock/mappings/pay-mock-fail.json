@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/pay",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$[?(@.should_fail == true || @.should_fail == 'true')]"
+      }
+    ],
+    "headers": {
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    }
+  },
+  "response": {
+    "status": 400,
+    "jsonBody": {
+      "error": "ERROR"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

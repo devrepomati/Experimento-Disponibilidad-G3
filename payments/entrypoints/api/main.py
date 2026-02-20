@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, Response
 from payments.infrastructure.payment_repository import get_all_payments
-from payments.application.metrics import registry
 from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 
 app = Flask(__name__)
@@ -30,7 +29,8 @@ def get_payments():
 
 @app.route("/metrics")
 def metrics():
-    data = generate_latest(registry)
+    from prometheus_client import generate_latest
+    data = generate_latest()
     return Response(data, mimetype=CONTENT_TYPE_LATEST)
 
 if __name__ == "__main__":
