@@ -61,7 +61,7 @@ class VotingCoordinator(VotingPort):
                 unmasked = False
                 final_value = None
 
-                # Voting 2 de 3
+                # Voting 2 de 3 (incluyendo -1 como valor válido)
                 for value in results:
                     if results.count(value) >= 2:
                         final_value = value
@@ -71,7 +71,7 @@ class VotingCoordinator(VotingPort):
                             self.inconsistencies_masked.inc()
                         break
                 else:
-                    # Si los 3 difieren, fallback
+                    # Si los 3 difieren, fallback (incluyendo -1)
                     final_value = sum(results) / 3
                     self.inconsistencies_detected.inc()
                     unmasked = True

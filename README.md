@@ -60,6 +60,14 @@ docker-compose down
 
 ---
 
+### Trouble shooting
+
+Tuvimos algunos problemas con wiremock. Se debe ejecutar este comando para asegurar la creacion de los endpoints:
+
+```bash
+bash wiremock/create_mock_api.sh
+```
+
 ## Prometheus
 ### Queries útiles para el experimento
 

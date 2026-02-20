@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/price-strategy3",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$[?(@.fail_strategy3 == true || @.fail_strategy3 == 'true' || @.fail_strategy3 == 'True')]"
+      }
+    ],
+    "headers": {
+      "Content-Type": {
+        "contains": "application/json"
+      }
+    }
+  },
+  "response": {
+    "status": 400,
+    "jsonBody": {
+      "error": "ERROR"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
