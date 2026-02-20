@@ -36,6 +36,10 @@ services:
       - kafka
     networks:
       - travel-hub-net
+    ports:
+      - "8004:8004"
+    volumes:
+      - ./payments/payments.db:/app/payments.db
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
@@ -110,6 +114,8 @@ services:
         sleep 20
         /usr/bin/kafka-topics --create --if-not-exists --topic RESERVAS --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
         /usr/bin/kafka-topics --create --if-not-exists --topic PAYMENTS --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
+        /usr/bin/kafka-topics --create --if-not-exists --topic PAYMENTS_DLQ --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
+
     networks:
       - travel-hub-net
 
