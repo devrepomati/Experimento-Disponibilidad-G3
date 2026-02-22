@@ -24,6 +24,7 @@ RUN chmod +x /app/billing/entrypoints/api/start.sh
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
+ENV VOTING_ENABLED=1
 
 # Comando de inicio para Flask y worker
 CMD ["sh", "entrypoints/api/start.sh"]

@@ -18,6 +18,8 @@ services:
     env_file:
       - ./billing/infrastructure/config/database.env
       - ./billing/infrastructure/config/kafka.env
+    environment:
+      - VOTING_ENABLED=1
     depends_on:
       - kafka
     networks:
