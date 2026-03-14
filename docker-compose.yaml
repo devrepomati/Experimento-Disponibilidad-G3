@@ -1,6 +1,12 @@
 version: "3.8"
 
 services:
+  authorizer:
+    build: ./authorizer
+    container_name: authorizer
+    networks:
+      - travel-hub-net
+
   reservas:
     build: ./reservas
     container_name: reservas
@@ -118,6 +124,7 @@ services:
         /usr/bin/kafka-topics --create --if-not-exists --topic RESERVAS --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
         /usr/bin/kafka-topics --create --if-not-exists --topic PAYMENTS --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
         /usr/bin/kafka-topics --create --if-not-exists --topic PAYMENTS_DLQ --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
+        /usr/bin/kafka-topics --create --if-not-exists --topic security.events --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
 
     networks:
       - travel-hub-net
@@ -129,7 +136,7 @@ services:
       - ./locust:/mnt/locust
     working_dir: /mnt/locust
     command: >
-      -f locustfile.py
+      -f locust_experimento_seguridad.py
       --host=http://api-gateway:80
     ports:
       - "8089:8089"
@@ -171,6 +178,37 @@ services:
       - ./wiremock/create_mock_api.sh:/home/wiremock/create_mock_api.sh
       - ./wiremock/entrypoint.sh:/home/wiremock/entrypoint.sh
     entrypoint: ["/bin/bash", "/home/wiremock/entrypoint.sh"]
+    networks:
+      - travel-hub-net
+
+  redis:
+    image: redis:7.2
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - travel-hub-net
+
+  idempotency_store:
+    build: ./idempotency_store
+    container_name: idempotency_store
+    depends_on:
+      - redis
+      - kafka
+    ports:
+      - "5002:5002"
+    networks:
+      - travel-hub-net
+
+  account_blocker:
+    build: ./account_blocker
+    container_name: account_blocker
+    depends_on:
+      - redis
+      - kafka
+    ports:
+      - "5001:5001"
+      - "5003:5001"
     networks:
       - travel-hub-net
 
