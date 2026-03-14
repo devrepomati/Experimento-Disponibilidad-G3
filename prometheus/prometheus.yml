@@ -8,3 +8,9 @@ scrape_configs:
   - job_name: 'payments'
     static_configs:
       - targets: ['payments:8004']
+  - job_name: 'account_blocker'
+    static_configs:
+      - targets: ['account_blocker:5001']
+  - job_name: 'idempotency_store'
+    static_configs:
+      - targets: ['idempotency_store:5002']
